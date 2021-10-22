@@ -15,7 +15,7 @@ loadQuestions(numOfQuestion);
 
 function loadQuestions(number) {
     if (number < 5) {
-        fetch('quiz_questions.json')
+        fetch('https://raw.githubusercontent.com/SaharZahran/Project2_Online_Quiz_Website/main/quiz_questions.json')
             .then(response => response.json())
             .then(data => {
                 addQuestion(data[number]);
