@@ -9,21 +9,29 @@ let right_answer;
 let correct = 0;
 let user_answers = [];
 let right_answers = [];
-
-
-loadQuestions(numOfQuestion);
+let options;
+let quiz_number = JSON.parse(localStorage.getItem('quiz_number'));
+const questionsNum = document.querySelector('.questionsNum');
+let end_iteration
 
 function loadQuestions(number) {
+
     if (number < 5) {
-        fetch('https://raw.githubusercontent.com/SaharZahran/Project2_Online_Quiz_Website/main/quiz_questions.json')
+        fetch('quiz_questions.json')
             .then(response => response.json())
             .then(data => {
-                addQuestion(data[number]);
+                options = data[quiz_number][number].options;
+                console.log(options);
+                addQuestion(options, data[quiz_number][number].Question);
                 createBullets(number);
-                right_answer = data[numOfQuestion].right_answer;
+
+                right_answer = data[quiz_number][number].right_answer;
+                console.log(right_answer);
             })
     }
 }
+
+loadQuestions(numOfQuestion);
 submit_Button.addEventListener('click', () => {
 
     checkRightAnswer(right_answer);
@@ -46,7 +54,7 @@ submit_Button.addEventListener('click', () => {
 })
 
 function createBullets(numOfQuestion) {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i <= 4; i++) {
         const span = document.createElement('span');
         spans.appendChild(span);
         if (i === numOfQuestion) {
@@ -56,13 +64,12 @@ function createBullets(numOfQuestion) {
 
 }
 
-function addQuestion(number_of_question) {
-
+function addQuestion(arrayOfOptions, number_of_question) {
     const questionText = document.createElement('h2');
-    questionText.textContent = number_of_question['Question'];
+    questionText.textContent = number_of_question;
     question.appendChild(questionText);
 
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 0; i <= 3; i++) {
         const answer = document.createElement('div');
         answer.classList.add('answer');
         const input = document.createElement('input');
@@ -70,7 +77,7 @@ function addQuestion(number_of_question) {
         input.type = 'radio';
         input.id = `answer${i}`;
         const label = document.createElement('label');
-        label.textContent = number_of_question[`answer${i}`];
+        label.textContent = arrayOfOptions[i];
         answer.appendChild(input);
         answer.appendChild(label);
         allAnswers.appendChild(answer);
